@@ -1,0 +1,8 @@
+{
+  "require": {
+    "phpmailer/phpmailer": "~5.2",
+    "katzgrau/klogger": "dev-master",
+    "erusev/parsedown": "1.6.*",
+    "ramsey/uuid": "^3.5"
+  }
+}
