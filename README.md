@@ -66,7 +66,24 @@ shell执行
 ```
 
 ----
-部分来源 yii2.0 thinkphp
+###剩余说用说明    
+[Wiki](https://github.com/Alrash/Aria/wiki)    
+**注：部分思想来源 yii2.0 thinkphp**    
+
+----
+###样例测试    
+使用提供nignx.conf(须更改root变量)
+```url
+http://127.0.0.1
+#测试，显示单页(index/index)
+http://127.0.0.1/index.htm
+#测试，同上（顺带测试url设置：后缀htm，使用美化，路由规则/<action:[^/]+> => /index/<action>）
+http://127.0.0.1/index
+#测试，url设置：后缀htm，使用美化，路由规则deny => /error(顺带测试使用视图组渲染)
+http://127.0.0.1/abc.htm
+#测试，url设置：后缀htm，使用美化，路由规则error => /error/action(顺带测试控制器重定向)
+```
+
 
 [](来源ramsey / uuid)
 [badge-license]: https://img.shields.io/aur/license/yaourt.svg?style=flat-square
