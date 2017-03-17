@@ -22,7 +22,7 @@
 
 return [
     'notFoundAction' => [
-        'error/main',
-        'error/index',
+        'index' => 'error/main',
+        'indexPage' => 'error/index',
     ],
 ];

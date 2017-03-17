@@ -11,5 +11,6 @@ use Aria\base\View;
 </head>
 <body>
     <h1 style="text-align: center">路由错误</h1>
+    <?php #View::renderNextByAlias('indexPage')?>
     <?php View::renderNext()?>
 </body>
