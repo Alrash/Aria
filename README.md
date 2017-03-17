@@ -1,9 +1,6 @@
-#一个简易的PHP MVC框架 
+# 一个简易的PHP MVC框架 
 
-[![Software License][badge-license]][license]
-[]([![Total Downloads][badge-downloads]][downloads])
-
-###安装
+### 安装
 1. 安装需求
 >* php >= 7.1（如果用Security.php文件） >= 7.0
 >* extension: pdo_mysql openssl
@@ -22,7 +19,7 @@ shell执行
 ```
 
 
-###目录格式及作用
+### 目录格式及作用
 ```
 ----webRoot/                    #web根目录
     |----Aria/                  #框架目录
@@ -66,12 +63,12 @@ shell执行
 ```
 
 ----
-###剩余说用说明    
+### 剩余说用说明    
 [Wiki](https://github.com/Alrash/Aria/wiki)    
 **注：部分思想来源 yii2.0 thinkphp**    
 
 ----
-###样例测试    
+### 样例测试    
 使用提供nignx.conf(须更改root变量)
 ```url
 http://127.0.0.1
@@ -83,11 +80,3 @@ http://127.0.0.1/index
 http://127.0.0.1/abc.htm
 #测试，url设置：后缀htm，使用美化，路由规则error => /error/action(顺带测试控制器重定向)
 ```
-
-
-[](来源ramsey / uuid)
-[badge-license]: https://img.shields.io/aur/license/yaourt.svg?style=flat-square
-[badge-downloads]: https://img.shields.io/packagist/dt/ramsey/uuid.svg?style=flat-square
-
-[license]: https://github.com/Alrash/Aria/master/LICENSE
-[downloads]: https://packagist.org/packages/Alrash/Aria
