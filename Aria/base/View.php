@@ -19,6 +19,7 @@ class View extends Component implements ViewInterface{
     private static $data;
 
     private static $viewUnit;
+    private static $viewUnitByName = [];
     private static $viewMap = [];
     private $useUnit = false;
 
@@ -31,7 +32,7 @@ class View extends Component implements ViewInterface{
 
         if ($this->useUnit === true) {
             //使用viewMap渲染
-            self::renderNext();
+            self::renderNextByAlias('index');
         }elseif ($this->single === true) {
             //单独文件渲染
             include($this->getExistedPath($this->view . '/' . $this->page));
@@ -53,15 +54,48 @@ class View extends Component implements ViewInterface{
     /**
      * 组件拼接渲染
      * 需要包含的地方，调用
+     *
+     * 比较烂的地方
      */
     public static function renderNext() {
         // TODO: Implement renderNext() method.
         if (self::$viewUnit instanceof Queue) {
-            if (!self::$viewUnit->isEmpty()) {
+            $flag = true;
+
+            /*
+             * 寻找未被包含的组件
+             * 存在含有重复值的bug by 2017.03.18
+             * */
+            do {
+                if (self::$viewUnit->isEmpty()) {
+                    $flag = false;
+                }
+
                 $top = self::$viewUnit->top();
                 self::$viewUnit->pop();
-                include($top);
+            }while(!in_array($top['page'], self::$viewUnitByName));
+
+            if ($flag === true) {
+                //删除viewUnitByName数组[alias]键
+                unset(self::$viewUnitByName[$top['alias']]);
+
+                include($top['page']);
             }
+        }
+    }
+
+    /**
+     * @param $alias string 组件别名
+     *
+     * 组件渲染用
+     *
+     * 比较烂的地方
+     */
+    public static function renderNextByAlias(string $alias) {
+        if (isset(self::$viewUnitByName[$alias])) {
+            $page = self::$viewUnitByName[$alias];
+            unset(self::$viewUnitByName[$alias]);
+            include($page);
         }
     }
 
@@ -199,13 +233,28 @@ class View extends Component implements ViewInterface{
             self::$viewUnit = new Queue();
             $viewUnit = self::$viewMap[$index];
 
-            foreach ($viewUnit as $path) {
-                self::$viewUnit->push($this->getExistedPath($path));
+            //防止缺失index
+            if (!array_key_exists('index', $viewUnit)) {
+                throw new MissingException('view unit ' . $index . ' missing index key');
+                return;
+            }
+
+            //移除index标签
+            self::$viewUnitByName['index'] = $this->getExistedPath($viewUnit['index']);
+            unset($viewUnit['index']);
+
+            foreach ($viewUnit as $alias => $path) {
+                $real = $this->getExistedPath($path);
+                self::$viewUnit->push(['alias' => $alias, 'page' => $real]);
+                //添加别名用数组
+                if (is_string($alias)) {
+                    self::$viewUnitByName[$alias] = $real;
+                }
             }
 
             $this->useUnit = true;
         }else {
-            throw new MissingException('View Map does not have key ' . $index . '!');
+            throw new MissingException('View Map does not have key ' . $index);
         }
     }
 }

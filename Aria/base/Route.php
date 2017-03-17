@@ -33,7 +33,7 @@ class Route extends Component {
      */
     public function getRealRoute(): string {
         if ($this->pretty == false || $this->rules === [] || $this->originRoute === '/') {
-            return $this->getOriginRoute();
+                return $this->getOriginRoute();
         }
 
         $targetRoute = null;
@@ -96,7 +96,12 @@ class Route extends Component {
                 },
                 $originRule);
         //添加/^$/i标记，添加虚假后缀
-        $originRule = '/^' . str_replace('/', '\/', $originRule) . $this->suffix . '$/i';
+        //$originRule = '/^' . str_replace('/', '\/', $originRule) . $this->suffix . '$/i';
+        $originRule = '/^' . str_replace('/', '\/', $originRule);
+        if ($originRule[strlen($originRule) - 1] != '/') {
+            $originRule .= '.' . $this->suffix;
+        }
+        $originRule .= '$/i';
 
         /*
          * $matches存放匹配结果，$matches[0]存放整个路径 = route，不需要
@@ -172,6 +177,7 @@ class Route extends Component {
      */
     private function setSuffix($suffix) {
         $this->suffix = isset($suffix) ? $suffix : '';
+        $this->suffix = ltrim($this->suffix, '.');
     }
 
     /**
@@ -208,7 +214,7 @@ class Route extends Component {
      * @return string
      */
     public function getOriginRoute(): string {
-        return rtrim($this->originRoute, $this->suffix);
+        return preg_replace('/\.' . $this->suffix . '$/i', '', $this->originRoute);
     }
 
     /**
